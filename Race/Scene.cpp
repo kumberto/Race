@@ -23,7 +23,8 @@ void Scene::KeyPressed(int btnCode)
 {
 	if (btnCode == 80) //down
 	{
-		if (speedCounter_ < 300 && speed_ > 48) {
+		if (speedCounter_ < 300 && speed_ > 48)
+		{
 			speedCounter_ += 30;
 			speed_ -= 1;
 			SetChar(37, 6, speed_);
@@ -31,7 +32,8 @@ void Scene::KeyPressed(int btnCode)
 	}
 	else if (btnCode == 75) //left
 	{
-		if (checkLeftMove()) {
+		if (checkLeftMove())
+		{
 			cleanRacing();
 			racing_.setRacingCar(-1);
 			moveRacing();
@@ -39,7 +41,8 @@ void Scene::KeyPressed(int btnCode)
 	}
 	else if (btnCode == 77) //right
 	{
-		if (checkRightMove()) {
+		if (checkRightMove())
+		{
 			cleanRacing();
 			racing_.setRacingCar(1);
 			moveRacing();
@@ -47,7 +50,8 @@ void Scene::KeyPressed(int btnCode)
 	}
 	else if (btnCode == 72)
 	{
-		if (speedCounter_ > 60 && speed_ < 58) {
+		if (speedCounter_ > 60 && speed_ < 58)
+		{
 			speedCounter_ -= 30;
 			speed_ += 1;
 			SetChar(37, 6, speed_);
@@ -83,8 +87,10 @@ void Scene::UpdateF(float deltaTime)
 	int strip = 0;
 	if (!pause_)
 	{
-		if (!collision_) {
-			if (oncomingCar_ == nullptr) {
+		if (!collision_)
+		{
+			if (oncomingCar_ == nullptr)
+			{
 				strip = rand() % 3;
 				OncomingCar* car = new OncomingCar((StripOfRoadway)strip);
 				oncomingCar_ = car;
@@ -93,7 +99,8 @@ void Scene::UpdateF(float deltaTime)
 			oncomingCar_->setOncomingCar(1);
 			moveOncomingCar();
 			checkCollisionCars();
-			if (oncomingCar_->getCarBody().getFrontPartOfCar().getY() == 20) {
+			if (oncomingCar_->getCarBody().getFrontPartOfCar().getY() == 20)
+			{
 				OncomingCar* temp = oncomingCar_;
 				oncomingCar_ = nullptr;
 				delete temp;
@@ -134,18 +141,22 @@ void Scene::moveRacing()
 
 void Scene::moveOncomingCar()
 {
-	if (oncomingCar_->getCarBody().getFrontPartOfCar().getY() > 4 && oncomingCar_->getCarBody().getFrontPartOfCar().getY() < 20) {
+	if (oncomingCar_->getCarBody().getFrontPartOfCar().getY() > 4 && oncomingCar_->getCarBody().getFrontPartOfCar().getY() < 20)
+	{
 		SetChar(oncomingCar_->getCarBody().getFrontPartOfCar().getX(), oncomingCar_->getCarBody().getFrontPartOfCar().getY(), '+');
 	}
-	if (oncomingCar_->getCarBody().getDriverSeat().getY() > 4 && oncomingCar_->getCarBody().getDriverSeat().getY() < 20) {
+	if (oncomingCar_->getCarBody().getDriverSeat().getY() > 4 && oncomingCar_->getCarBody().getDriverSeat().getY() < 20)
+	{
 		SetChar(oncomingCar_->getCarWheels().getFrontRight().getX(), oncomingCar_->getCarWheels().getFrontRight().getY(), '+');
 		SetChar(oncomingCar_->getCarWheels().getFrontLeft().getX(), oncomingCar_->getCarWheels().getFrontLeft().getY(), '+');
 		SetChar(oncomingCar_->getCarBody().getDriverSeat().getX(), oncomingCar_->getCarBody().getDriverSeat().getY(), '+');
 	}
-	if (oncomingCar_->getCarBody().getPassengerSeat().getY() > 4 && oncomingCar_->getCarBody().getPassengerSeat().getY() < 20) {
+	if (oncomingCar_->getCarBody().getPassengerSeat().getY() > 4 && oncomingCar_->getCarBody().getPassengerSeat().getY() < 20)
+	{
 		SetChar(oncomingCar_->getCarBody().getPassengerSeat().getX(), oncomingCar_->getCarBody().getPassengerSeat().getY(), '+');
 	}
-	if (oncomingCar_->getCarBody().getRearPartOfCar().getY() > 4 && oncomingCar_->getCarBody().getRearPartOfCar().getY() < 20) {
+	if (oncomingCar_->getCarBody().getRearPartOfCar().getY() > 4 && oncomingCar_->getCarBody().getRearPartOfCar().getY() < 20)
+	{
 		SetChar(oncomingCar_->getCarBody().getRearPartOfCar().getX(), oncomingCar_->getCarBody().getRearPartOfCar().getY(), '+');
 		SetChar(oncomingCar_->getCarWheels().getBackRight().getX(), oncomingCar_->getCarWheels().getBackRight().getY(), '+');
 		SetChar(oncomingCar_->getCarWheels().getBackLeft().getX(), oncomingCar_->getCarWheels().getBackLeft().getY(), '+');
@@ -171,18 +182,22 @@ const int Scene::getSpeed()
 
 void Scene::cleanOncoming()
 {
-	if (oncomingCar_->getCarBody().getFrontPartOfCar().getY() > 4 && oncomingCar_->getCarBody().getFrontPartOfCar().getY() < 20) {
+	if (oncomingCar_->getCarBody().getFrontPartOfCar().getY() > 4 && oncomingCar_->getCarBody().getFrontPartOfCar().getY() < 20)
+	{
 		SetChar(oncomingCar_->getCarBody().getFrontPartOfCar().getX(), oncomingCar_->getCarBody().getFrontPartOfCar().getY(), ' ');
 	}
-	if (oncomingCar_->getCarBody().getDriverSeat().getY() > 4 && oncomingCar_->getCarBody().getDriverSeat().getY() < 20) {
+	if (oncomingCar_->getCarBody().getDriverSeat().getY() > 4 && oncomingCar_->getCarBody().getDriverSeat().getY() < 20)
+	{
 		SetChar(oncomingCar_->getCarWheels().getFrontRight().getX(), oncomingCar_->getCarWheels().getFrontRight().getY(), ' ');
 		SetChar(oncomingCar_->getCarWheels().getFrontLeft().getX(), oncomingCar_->getCarWheels().getFrontLeft().getY(), ' ');
 		SetChar(oncomingCar_->getCarBody().getDriverSeat().getX(), oncomingCar_->getCarBody().getDriverSeat().getY(), ' ');
 	}
-	if (oncomingCar_->getCarBody().getPassengerSeat().getY() > 4 && oncomingCar_->getCarBody().getPassengerSeat().getY() < 20) {
+	if (oncomingCar_->getCarBody().getPassengerSeat().getY() > 4 && oncomingCar_->getCarBody().getPassengerSeat().getY() < 20)
+	{
 		SetChar(oncomingCar_->getCarBody().getPassengerSeat().getX(), oncomingCar_->getCarBody().getPassengerSeat().getY(), ' ');
 	}
-	if (oncomingCar_->getCarBody().getRearPartOfCar().getY() > 4 && oncomingCar_->getCarBody().getRearPartOfCar().getY() < 20) {
+	if (oncomingCar_->getCarBody().getRearPartOfCar().getY() > 4 && oncomingCar_->getCarBody().getRearPartOfCar().getY() < 20)
+	{
 		SetChar(oncomingCar_->getCarBody().getRearPartOfCar().getX(), oncomingCar_->getCarBody().getRearPartOfCar().getY(), ' ');
 		SetChar(oncomingCar_->getCarWheels().getBackRight().getX(), oncomingCar_->getCarWheels().getBackRight().getY(), ' ');
 		SetChar(oncomingCar_->getCarWheels().getBackLeft().getX(), oncomingCar_->getCarWheels().getBackLeft().getY(), ' ');
@@ -191,16 +206,21 @@ void Scene::cleanOncoming()
 
 void Scene::createFrame()
 {
-	for (int i = 4; i < 21; i++) {
-		for (int j = 20; j < 31; j++) {
+	for (int i = 4; i < 21; i++)
+	{
+		for (int j = 20; j < 31; j++)
+		{
 			if (i == 4 || j == 20 || i == 20 || j == 30) {
 				SetChar(j, i, '#');
 			}
 		}
 	}
-	for (int i = 4; i < 9; i++) {
-		for (int j = 31; j < 40; j++) {
-			if (i == 4 || i == 8|| j == 39) {
+	for (int i = 4; i < 9; i++)
+	{
+		for (int j = 31; j < 40; j++)
+		{
+			if (i == 4 || i == 8|| j == 39)
+			{
 				SetChar(j, i, '#');
 			}
 		}
