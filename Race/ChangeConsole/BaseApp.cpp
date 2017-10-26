@@ -117,6 +117,13 @@ void BaseApp::Run()
 		while (1)
 		{
 			deltaTime = timer.Now();
+			if (kbhit())
+			{
+
+				KeyPressed(getch());
+				if (!FlushConsoleInputBuffer(mConsoleIn))
+					cout << "FlushConsoleInputBuffer failed with error " << GetLastError();
+			}
 			if (deltaTime > Scene::getSpeed())
 				break;
 		}
