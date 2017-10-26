@@ -12,8 +12,6 @@ public:
 	~Scene();
 	void KeyPressed(int btnCode);
 	void UpdateF(float deltaTime);
-	void moveRacing();
-	void cleanRacing();
 	static const int getSpeed();
 
 private:
@@ -23,7 +21,9 @@ private:
 	bool checkRightMove();
 	void createFrame();
 	void checkCollisionCars();
-
+	void moveRacing();
+	void cleanRacing();
+	
 	RacingCar racing_;
 	OncomingCar* oncomingCar_;
 	static int speedCounter_;
