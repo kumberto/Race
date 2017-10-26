@@ -23,7 +23,7 @@ void Scene::KeyPressed(int btnCode)
 {
 	if (btnCode == 80) //down
 	{
-		if (speedCounter_ < 300 && speed_ > 48)
+		if (speedCounter_ < 300 && speed_ > 48 && !collision_)
 		{
 			speedCounter_ += 30;
 			speed_ -= 1;
@@ -32,7 +32,7 @@ void Scene::KeyPressed(int btnCode)
 	}
 	else if (btnCode == 75) //left
 	{
-		if (checkLeftMove())
+		if (checkLeftMove() && !collision_)
 		{
 			cleanRacing();
 			racing_.setRacingCar(-1);
@@ -41,7 +41,7 @@ void Scene::KeyPressed(int btnCode)
 	}
 	else if (btnCode == 77) //right
 	{
-		if (checkRightMove())
+		if (checkRightMove() && !collision_)
 		{
 			cleanRacing();
 			racing_.setRacingCar(1);
@@ -50,7 +50,7 @@ void Scene::KeyPressed(int btnCode)
 	}
 	else if (btnCode == 72)
 	{
-		if (speedCounter_ > 60 && speed_ < 58)
+		if (speedCounter_ > 60 && speed_ < 58 && !collision_)
 		{
 			speedCounter_ -= 30;
 			speed_ += 1;
@@ -96,9 +96,9 @@ void Scene::UpdateF(float deltaTime)
 				oncomingCar_ = car;
 			}
 			cleanOncoming();
+			checkCollisionCars();
 			oncomingCar_->setOncomingCar(1);
 			moveOncomingCar();
-			checkCollisionCars();
 			if (oncomingCar_->getCarBody().getFrontPartOfCar().getY() == 20)
 			{
 				OncomingCar* temp = oncomingCar_;
@@ -117,7 +117,7 @@ void Scene::UpdateF(float deltaTime)
 			SetChar(29, 12, 'R');
 		}
 	}
-	else
+	else if (!collision_)
 	{
 		SetChar(23, 12, 'P');
 		SetChar(24, 12, 'A');
