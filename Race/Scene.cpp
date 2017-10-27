@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include <time.h>
+#include <ctime>
 #include "Scene.h"
 
 int Scene::speedCounter_ = 300;
@@ -21,46 +21,36 @@ Scene::~Scene()
 
 void Scene::KeyPressed(int btnCode)
 {
-	if (btnCode == 80) //down
-	{
-		if (speedCounter_ < 300 && speed_ > 48 && !collision_)
-		{
+	if (btnCode == 80) { //down
+		if (speedCounter_ < 300 && speed_ > 48 && !collision_) {
 			speedCounter_ += 30;
 			speed_ -= 1;
 			SetChar(37, 6, speed_);
 		}
 	}
-	else if (btnCode == 75) //left
-	{
-		if (checkLeftMove() && !collision_)
-		{
+	else if (btnCode == 75) {//left
+		if (checkLeftMove() && !collision_) {
 			cleanRacing();
 			racing_.setRacingCar(-1);
 			moveRacing();
 		}
 	}
-	else if (btnCode == 77) //right
-	{
-		if (checkRightMove() && !collision_)
-		{
+	else if (btnCode == 77) {//right
+		if (checkRightMove() && !collision_) {
 			cleanRacing();
 			racing_.setRacingCar(1);
 			moveRacing();
 		}
 	}
-	else if (btnCode == 72)
-	{
-		if (speedCounter_ > 60 && speed_ < 58 && !collision_)
-		{
+	else if (btnCode == 72) {
+		if (speedCounter_ > 60 && speed_ < 58 && !collision_) {
 			speedCounter_ -= 30;
 			speed_ += 1;
 			SetChar(37, 6, speed_);
 		}
 	}
-	else if (btnCode == 13) 
-	{
-		if (pause_)
-		{
+	else if (btnCode == 13) {
+		if (pause_) {
 			pause_ = false;
 			SetChar(23, 12, ' ');
 			SetChar(24, 12, ' ');
@@ -70,13 +60,11 @@ void Scene::KeyPressed(int btnCode)
 			moveRacing();
 			moveOncomingCar();
 		}
-		else
-		{
+		else {
 			pause_ = true;
 		}
 	}
-	else if (btnCode == 27)
-	{
+	else if (btnCode == 27) {
 		exit(0);
 	}
 }
@@ -85,22 +73,19 @@ void Scene::UpdateF(float deltaTime)
 {
 	srand(time(nullptr));
 	int strip = 0;
-	if (!pause_)
-	{
-		if (!collision_)
-		{
-			if (oncomingCar_ == nullptr)
-			{
+	if (!pause_) {
+		if (!collision_) {
+			if (oncomingCar_ == nullptr) {
 				strip = rand() % 3;
 				OncomingCar* car = new OncomingCar((StripOfRoadway)strip);
 				oncomingCar_ = car;
 			}
 			cleanOncoming();
+			moveRacing();
 			checkCollisionCars();
 			oncomingCar_->setOncomingCar(1);
 			moveOncomingCar();
-			if (oncomingCar_->getCarBody().getFrontPartOfCar().getY() == 20)
-			{
+			if (oncomingCar_->getCarBody().getFrontPartOfCar().getY() == 20) {
 				OncomingCar* temp = oncomingCar_;
 				oncomingCar_ = nullptr;
 				delete temp;
@@ -117,8 +102,7 @@ void Scene::UpdateF(float deltaTime)
 			SetChar(29, 12, 'R');
 		}
 	}
-	else if (!collision_)
-	{
+	else if (!collision_) {
 		SetChar(23, 12, 'P');
 		SetChar(24, 12, 'A');
 		SetChar(25, 12, 'U');
@@ -141,22 +125,18 @@ void Scene::moveRacing()
 
 void Scene::moveOncomingCar()
 {
-	if (oncomingCar_->getCarBody().getFrontPartOfCar().getY() > 4 && oncomingCar_->getCarBody().getFrontPartOfCar().getY() < 20)
-	{
+	if (oncomingCar_->getCarBody().getFrontPartOfCar().getY() > 4 && oncomingCar_->getCarBody().getFrontPartOfCar().getY() < 20) {
 		SetChar(oncomingCar_->getCarBody().getFrontPartOfCar().getX(), oncomingCar_->getCarBody().getFrontPartOfCar().getY(), '+');
 	}
-	if (oncomingCar_->getCarBody().getDriverSeat().getY() > 4 && oncomingCar_->getCarBody().getDriverSeat().getY() < 20)
-	{
+	if (oncomingCar_->getCarBody().getDriverSeat().getY() > 4 && oncomingCar_->getCarBody().getDriverSeat().getY() < 20) {
 		SetChar(oncomingCar_->getCarWheels().getFrontRight().getX(), oncomingCar_->getCarWheels().getFrontRight().getY(), '+');
 		SetChar(oncomingCar_->getCarWheels().getFrontLeft().getX(), oncomingCar_->getCarWheels().getFrontLeft().getY(), '+');
 		SetChar(oncomingCar_->getCarBody().getDriverSeat().getX(), oncomingCar_->getCarBody().getDriverSeat().getY(), '+');
 	}
-	if (oncomingCar_->getCarBody().getPassengerSeat().getY() > 4 && oncomingCar_->getCarBody().getPassengerSeat().getY() < 20)
-	{
+	if (oncomingCar_->getCarBody().getPassengerSeat().getY() > 4 && oncomingCar_->getCarBody().getPassengerSeat().getY() < 20) {
 		SetChar(oncomingCar_->getCarBody().getPassengerSeat().getX(), oncomingCar_->getCarBody().getPassengerSeat().getY(), '+');
 	}
-	if (oncomingCar_->getCarBody().getRearPartOfCar().getY() > 4 && oncomingCar_->getCarBody().getRearPartOfCar().getY() < 20)
-	{
+	if (oncomingCar_->getCarBody().getRearPartOfCar().getY() > 4 && oncomingCar_->getCarBody().getRearPartOfCar().getY() < 20) {
 		SetChar(oncomingCar_->getCarBody().getRearPartOfCar().getX(), oncomingCar_->getCarBody().getRearPartOfCar().getY(), '+');
 		SetChar(oncomingCar_->getCarWheels().getBackRight().getX(), oncomingCar_->getCarWheels().getBackRight().getY(), '+');
 		SetChar(oncomingCar_->getCarWheels().getBackLeft().getX(), oncomingCar_->getCarWheels().getBackLeft().getY(), '+');
@@ -182,22 +162,18 @@ const int Scene::getSpeed()
 
 void Scene::cleanOncoming()
 {
-	if (oncomingCar_->getCarBody().getFrontPartOfCar().getY() > 4 && oncomingCar_->getCarBody().getFrontPartOfCar().getY() < 20)
-	{
+	if (oncomingCar_->getCarBody().getFrontPartOfCar().getY() > 4 && oncomingCar_->getCarBody().getFrontPartOfCar().getY() < 20) {
 		SetChar(oncomingCar_->getCarBody().getFrontPartOfCar().getX(), oncomingCar_->getCarBody().getFrontPartOfCar().getY(), ' ');
 	}
-	if (oncomingCar_->getCarBody().getDriverSeat().getY() > 4 && oncomingCar_->getCarBody().getDriverSeat().getY() < 20)
-	{
+	if (oncomingCar_->getCarBody().getDriverSeat().getY() > 4 && oncomingCar_->getCarBody().getDriverSeat().getY() < 20) {
 		SetChar(oncomingCar_->getCarWheels().getFrontRight().getX(), oncomingCar_->getCarWheels().getFrontRight().getY(), ' ');
 		SetChar(oncomingCar_->getCarWheels().getFrontLeft().getX(), oncomingCar_->getCarWheels().getFrontLeft().getY(), ' ');
 		SetChar(oncomingCar_->getCarBody().getDriverSeat().getX(), oncomingCar_->getCarBody().getDriverSeat().getY(), ' ');
 	}
-	if (oncomingCar_->getCarBody().getPassengerSeat().getY() > 4 && oncomingCar_->getCarBody().getPassengerSeat().getY() < 20)
-	{
+	if (oncomingCar_->getCarBody().getPassengerSeat().getY() > 4 && oncomingCar_->getCarBody().getPassengerSeat().getY() < 20) {
 		SetChar(oncomingCar_->getCarBody().getPassengerSeat().getX(), oncomingCar_->getCarBody().getPassengerSeat().getY(), ' ');
 	}
-	if (oncomingCar_->getCarBody().getRearPartOfCar().getY() > 4 && oncomingCar_->getCarBody().getRearPartOfCar().getY() < 20)
-	{
+	if (oncomingCar_->getCarBody().getRearPartOfCar().getY() > 4 && oncomingCar_->getCarBody().getRearPartOfCar().getY() < 20) {
 		SetChar(oncomingCar_->getCarBody().getRearPartOfCar().getX(), oncomingCar_->getCarBody().getRearPartOfCar().getY(), ' ');
 		SetChar(oncomingCar_->getCarWheels().getBackRight().getX(), oncomingCar_->getCarWheels().getBackRight().getY(), ' ');
 		SetChar(oncomingCar_->getCarWheels().getBackLeft().getX(), oncomingCar_->getCarWheels().getBackLeft().getY(), ' ');
@@ -206,21 +182,16 @@ void Scene::cleanOncoming()
 
 void Scene::createFrame()
 {
-	for (int i = 4; i < 21; i++)
-	{
-		for (int j = 20; j < 31; j++)
-		{
+	for (int i = 4; i < 21; i++) {
+		for (int j = 20; j < 31; j++) {
 			if (i == 4 || j == 20 || i == 20 || j == 30) {
 				SetChar(j, i, '#');
 			}
 		}
 	}
-	for (int i = 4; i < 9; i++)
-	{
-		for (int j = 31; j < 40; j++)
-		{
-			if (i == 4 || i == 8|| j == 39)
-			{
+	for (int i = 4; i < 9; i++) {
+		for (int j = 31; j < 40; j++) {
+			if (i == 4 || i == 8|| j == 39) {
 				SetChar(j, i, '#');
 			}
 		}
@@ -248,23 +219,20 @@ void Scene::checkCollisionCars()
 		GetChar(oncomingCar_->getCarWheels().getFrontLeft().getX(), (oncomingCar_->getCarWheels().getFrontLeft().getY() + 1)) == '+' ||
 		GetChar(oncomingCar_->getCarBody().getRearPartOfCar().getX(), (oncomingCar_->getCarBody().getRearPartOfCar().getY() + 1)) == '+' ||
 		GetChar(oncomingCar_->getCarWheels().getBackRight().getX(), (oncomingCar_->getCarWheels().getBackRight().getY() + 1)) == '+' ||
-		GetChar(oncomingCar_->getCarWheels().getBackLeft().getX(), (oncomingCar_->getCarWheels().getBackLeft().getY() + 1)) == '+')
-	{
+		GetChar(oncomingCar_->getCarWheels().getBackLeft().getX(), (oncomingCar_->getCarWheels().getBackLeft().getY() + 1)) == '+') {
 		collision_ = true;
 	}
 }
 
 bool Scene::checkLeftMove() {
-	if (racing_.getCarWheels().getFrontLeft().getX() == 21)
-	{
+	if (racing_.getCarWheels().getFrontLeft().getX() == 21) {
 		return false;
 	}
 	return true;
 }
 
 bool Scene::checkRightMove() {
-	if (racing_.getCarWheels().getFrontRight().getX() == 29)
-	{
+	if (racing_.getCarWheels().getFrontRight().getX() == 29) {
 		return false;
 	}
 	return true;

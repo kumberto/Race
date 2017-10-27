@@ -6,7 +6,6 @@ CarBody::CarBody()
 {
 }
 
-
 CarBody::~CarBody()
 {
 }

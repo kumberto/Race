@@ -10,6 +10,10 @@ class Scene :
 public:
 	Scene();
 	~Scene();
+	Scene(const Scene& scene) = delete;
+	Scene& operator=(const Scene& scene) = delete;
+	Scene(Scene&& scene) = delete;
+	Scene& operator=(Scene&& scene) = delete;
 	void KeyPressed(int btnCode);
 	void UpdateF(float deltaTime);
 	static const int getSpeed();

@@ -5,6 +5,10 @@ class CarWheels
 	public:
 		CarWheels();
 		~CarWheels();
+		CarWheels(const CarWheels& carWheels) = delete;
+		CarWheels& operator=(const CarWheels& carWheels) = delete;
+		CarWheels(CarWheels&& carWheels) = delete;
+		CarWheels& operator=(CarWheels&& carWheels) = delete;
 		const Point& getFrontRight() const;
 		const Point& getFrontLeft() const;
 		const Point& getBackRight() const;

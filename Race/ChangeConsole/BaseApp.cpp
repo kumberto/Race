@@ -1,8 +1,9 @@
 #include "../stdafx.h"
 #include <algorithm>
-#include <time.h>
+#include <ctime>
 #include <conio.h>
-#include <assert.h>
+#include <cstdlib>
+#include <cassert>
 #include <strsafe.h>
 #include "../Scene.h"
 
@@ -15,43 +16,41 @@ BaseApp::BaseApp(int xSize, int ySize) : X_SIZE(xSize), Y_SIZE(ySize)
 	SMALL_RECT windowSize = {0, 0, X_SIZE, Y_SIZE};
 	COORD windowBufSize = {X_SIZE+1, Y_SIZE+1};
 
-	mConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	mConsoleIn = GetStdHandle(STD_INPUT_HANDLE);
+	mConsole_ = GetStdHandle(STD_OUTPUT_HANDLE);
+	mConsoleIn_ = GetStdHandle(STD_INPUT_HANDLE);
 
-	if(!SetConsoleScreenBufferSize(mConsole,  windowBufSize))
+	if(!SetConsoleScreenBufferSize(mConsole_,  windowBufSize))
 	{
 		cout << "SetConsoleScreenBufferSize failed with error " << GetLastError() << endl;
 	}
-	if(!SetConsoleWindowInfo(mConsole, TRUE, &windowSize))
+	if(!SetConsoleWindowInfo(mConsole_, TRUE, &windowSize))
 	{
 		cout << "SetConsoleWindowInfo failed with error " << GetLastError() << endl;
 	}
 
 	CONSOLE_CURSOR_INFO cursorInfo;
-	GetConsoleCursorInfo(mConsole, &cursorInfo);
+	GetConsoleCursorInfo(mConsole_, &cursorInfo);
 	cursorInfo.bVisible = FALSE;
 	cursorInfo.dwSize = 1;
-	SetConsoleCursorInfo(mConsole, &cursorInfo);
+	SetConsoleCursorInfo(mConsole_, &cursorInfo);
 
 
-	mChiBuffer = (CHAR_INFO*)malloc((X_SIZE+1)*(Y_SIZE+1)*sizeof(CHAR_INFO));
+	mChiBuffer_ = (CHAR_INFO*)malloc((X_SIZE+1)*(Y_SIZE+1)*sizeof(CHAR_INFO));
 
-	mDwBufferSize.X = X_SIZE + 1;
-	mDwBufferSize.Y = Y_SIZE + 1;		// размер буфера данных
+	mDwBufferSize_.X = X_SIZE + 1;
+	mDwBufferSize_.Y = Y_SIZE + 1;		// размер буфера данных
 
-	mDwBufferCoord.X = 0;
-	mDwBufferCoord.Y = 0;				// координаты €чейки
+	mDwBufferCoord_.X = 0;
+	mDwBufferCoord_.Y = 0;				// координаты €чейки
 
-	mLpWriteRegion.Left = 0;
-	mLpWriteRegion.Top = 0;
-	mLpWriteRegion.Right = X_SIZE + 1;
-	mLpWriteRegion.Bottom = Y_SIZE + 1;	// пр€моугольник дл€ чтени€
+	mLpWriteRegion_.Left = 0;
+	mLpWriteRegion_.Top = 0;
+	mLpWriteRegion_.Right = X_SIZE + 1;
+	mLpWriteRegion_.Bottom = Y_SIZE + 1;	// пр€моугольник дл€ чтени€
 
 
-	for (int x=0; x<X_SIZE+1; x++)
-	{
-		for (int y=0; y<Y_SIZE+1; y++)
-		{
+	for (int x=0; x<X_SIZE+1; x++) {
+		for (int y=0; y<Y_SIZE+1; y++) {
 			SetChar(x, y, L' ');
 		}
 	}
@@ -59,35 +58,34 @@ BaseApp::BaseApp(int xSize, int ySize) : X_SIZE(xSize), Y_SIZE(ySize)
 
 BaseApp::~BaseApp()
 {
-	free(mChiBuffer);
+	free(mChiBuffer_);
 }
 
 void BaseApp::SetChar(int x, int y, wchar_t c)
 {
-	mChiBuffer[x + (X_SIZE+1)*y].Char.UnicodeChar = c;
+	mChiBuffer_[x + (X_SIZE+1)*y].Char.UnicodeChar = c;
 	
-	mChiBuffer[x + (X_SIZE+1)*y].Attributes = FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED;
+	mChiBuffer_[x + (X_SIZE+1)*y].Attributes = FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED;
 
 }
 
 void BaseApp::SetChar(int x, int y, int c)
 {
-	mChiBuffer[x + (X_SIZE+1)*y].Char.UnicodeChar = c;
+	mChiBuffer_[x + (X_SIZE+1)*y].Char.UnicodeChar = c;
 	
-	mChiBuffer[x + (X_SIZE+1)*y].Attributes = FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED;
+	mChiBuffer_[x + (X_SIZE+1)*y].Attributes = FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED;
 
 }
 
 
 wchar_t BaseApp::GetChar(int x, int y)
 {
-	return mChiBuffer[x + (X_SIZE+1)*y].Char.AsciiChar;
+	return mChiBuffer_[x + (X_SIZE+1)*y].Char.AsciiChar;
 }
 
 void BaseApp::Render()
 {
-	if (!WriteConsoleOutput(mConsole, mChiBuffer, mDwBufferSize, mDwBufferCoord, &mLpWriteRegion)) 
-	{
+	if (!WriteConsoleOutput(mConsole_, mChiBuffer_, mDwBufferSize_, mDwBufferCoord_, &mLpWriteRegion_)) {
 		printf("WriteConsoleOutput failed - (%d)\n", GetLastError()); 
 	}
 }
@@ -99,39 +97,36 @@ void BaseApp::Run()
 	int counter = 0;
 
 	int deltaTime = 0;
-	while (1)
-	{
+	while (true) {
 		timer.Start();
-		if (kbhit())
-		{
+		if (kbhit()) {
 
 			KeyPressed (getch());
-			if (!FlushConsoleInputBuffer(mConsoleIn))
-				cout<<"FlushConsoleInputBuffer failed with error "<<GetLastError();
+			if (!FlushConsoleInputBuffer(mConsoleIn_)) {
+				cout << "FlushConsoleInputBuffer failed with error " << GetLastError();
+			}
 		}
 
 		UpdateF((float)deltaTime / 1000.0f);
 		Render();
 		Sleep(1);
 
-		while (1)
-		{
+		while (true) {
 			deltaTime = timer.Now();
-			if (kbhit())
-			{
+			if (kbhit()) {
 
 				KeyPressed(getch());
-				if (!FlushConsoleInputBuffer(mConsoleIn))
+				if (!FlushConsoleInputBuffer(mConsoleIn_))
 					cout << "FlushConsoleInputBuffer failed with error " << GetLastError();
 			}
-			if (deltaTime > Scene::getSpeed())
+			if (deltaTime > Scene::getSpeed()) {
 				break;
+			}
 		}
 
 		sum += deltaTime;
 		counter++;
-		if (sum >= 1000)
-		{
+		if (sum >= 1000) {
 			TCHAR  szbuff[255];
 			StringCchPrintf(szbuff, 255, TEXT("FPS: %d"), counter);
 			SetConsoleTitle(szbuff);

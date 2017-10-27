@@ -6,6 +6,10 @@ class CarBody
 public:
 	CarBody();
 	~CarBody();
+	CarBody(const CarBody& carBody) = delete;
+	CarBody& operator=(const CarBody& carBody) = delete;
+	CarBody(CarBody&& carBody) = delete;
+	CarBody& operator=(CarBody&& carBody) = delete;
 	const Point& getFrontPartOfCar() const;
 	const Point& getDriverSeat() const;
 	const Point& getPassengerSeat() const;

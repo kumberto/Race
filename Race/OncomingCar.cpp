@@ -29,17 +29,17 @@ void OncomingCar::setOncomingCar(int number)
 
 void OncomingCar::initPartsOfCar(StripOfRoadway strip)
 {
-	if (strip == StripOfRoadway::LeftStrip)
+	if (strip == StripOfRoadway::LEFT_STRIP)
 	{
 		carBody_.initPartsOfCar(22, 0, 1, 2, 3);
 		carWheels_.initPartsOfCar(23, 1, 21, 3);
 	}
-	else if (strip == StripOfRoadway::CentralStrip)
+	else if (strip == StripOfRoadway::CENTRAL_STRIP)
 	{
 		carBody_.initPartsOfCar(25, 0, 1, 2, 3);
 		carWheels_.initPartsOfCar(26, 1, 24, 3);
 	}
-	else if (strip == StripOfRoadway::RightStrip)
+	else if (strip == StripOfRoadway::RIGHT_STRIP)
 	{
 		carBody_.initPartsOfCar(28, 0, 1, 2, 3);
 		carWheels_.initPartsOfCar(29, 1, 27, 3);

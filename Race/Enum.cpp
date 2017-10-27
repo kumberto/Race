@@ -1,2 +1,2 @@
 #pragma once
-enum StripOfRoadway {LeftStrip = 0, CentralStrip, RightStrip};
+enum StripOfRoadway {LEFT_STRIP = 0, CENTRAL_STRIP, RIGHT_STRIP};
