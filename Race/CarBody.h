@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CARBODY_H
+#define CARBODY_H
 #include "Point.h"
 
 class CarBody
@@ -24,3 +25,4 @@ private:
 	Point rearPartOfCar_;
 };
 
+#endif

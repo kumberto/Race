@@ -2,7 +2,7 @@
 #include "OncomingCar.h"
 
 
-OncomingCar::OncomingCar(StripOfRoadway strip)
+OncomingCar::OncomingCar(magicNumbers::StripOfRoadway strip)
 {
 	initPartsOfCar(strip);
 }
@@ -12,36 +12,28 @@ OncomingCar::~OncomingCar()
 {
 }
 
-const CarBody & OncomingCar::getCarBody() const
+void OncomingCar::setCar(int number)
 {
-	return carBody_;
+	const_cast<CarBody&>(getCarBody()).setCarBodyY(number);
+	const_cast<CarWheels&>(getCarWheels()).setCarWheelY(number);
 }
 
-const CarWheels & OncomingCar::getCarWheels() const
-{
-	return carWheels_;
-}
-void OncomingCar::setOncomingCar(int number)
-{
-	carBody_.setCarBodyY(number);
-	carWheels_.setCarWheelY(number);
-}
 
-void OncomingCar::initPartsOfCar(StripOfRoadway strip)
+void OncomingCar::initPartsOfCar(magicNumbers::StripOfRoadway strip)
 {
-	if (strip == StripOfRoadway::LEFT_STRIP)
+	if (strip == magicNumbers::StripOfRoadway::LEFT_STRIP)
 	{
-		carBody_.initPartsOfCar(22, 0, 1, 2, 3);
-		carWheels_.initPartsOfCar(23, 1, 21, 3);
+		const_cast<CarBody&>(getCarBody()).initPartsOfCar(22, 0, 1, 2, 3);
+		const_cast<CarWheels&>(getCarWheels()).initPartsOfCar(23, 1, 21, 3);
 	}
-	else if (strip == StripOfRoadway::CENTRAL_STRIP)
+	else if (strip == magicNumbers::StripOfRoadway::CENTRAL_STRIP)
 	{
-		carBody_.initPartsOfCar(25, 0, 1, 2, 3);
-		carWheels_.initPartsOfCar(26, 1, 24, 3);
+		const_cast<CarBody&>(getCarBody()).initPartsOfCar(25, 0, 1, 2, 3);
+		const_cast<CarWheels&>(getCarWheels()).initPartsOfCar(26, 1, 24, 3);
 	}
-	else if (strip == StripOfRoadway::RIGHT_STRIP)
+	else if (strip == magicNumbers::StripOfRoadway::RIGHT_STRIP)
 	{
-		carBody_.initPartsOfCar(28, 0, 1, 2, 3);
-		carWheels_.initPartsOfCar(29, 1, 27, 3);
+		const_cast<CarBody&>(getCarBody()).initPartsOfCar(28, 0, 1, 2, 3);
+		const_cast<CarWheels&>(getCarWheels()).initPartsOfCar(29, 1, 27, 3);
 	}
 }

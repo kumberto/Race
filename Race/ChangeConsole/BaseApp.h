@@ -1,6 +1,7 @@
 // Copyright 2009-2014 Blam Games, Inc. All Rights Reserved.
 
-#pragma once
+#ifndef BASEAPP_H
+#define BASEAPP_H
 
 #include <iostream>
 #include <Windows.h>
@@ -20,7 +21,7 @@ class BaseApp
 		COORD mDwBufferCoord_;
 		SMALL_RECT mLpWriteRegion_;
 
-		void Render();
+		void render();
 
 	public:
 		//размеры области вывода по горизонтали и вертикали в символах
@@ -38,16 +39,17 @@ class BaseApp
 		void Run();
 
 		//можно заполнить x,y-символ экрана определенным символом, или считать его
-		void SetChar(int x, int y, wchar_t c);
+		inline void SetChar(int x, int y, wchar_t c);
 		void SetChar(int x, int y, int c);
 		wchar_t GetChar(int x, int y);
 
 		/*эта функция вызывается каждую игровую итерацию, её можно переопределить, в наследнике класса.
 		в неё приходит deltaTime - разница во времени между предыдущей итерацией и этой, в секундах*/
-		virtual void UpdateF (float deltaTime){}
+		virtual void updateGameField(float deltaTime){}
 		/*эта функция вызывается при нажатии клавиши на клавиатуре, в неё приходит код клавиши - btnCode.
 		если использовать стрелки или функциональные клавиши, то придет общее для них число, например 224, а следующее за ним - 
 		будет уже непосредственно код самой клавиши, его можно получить, вызвав метод getch().
 		Метод KeyPressed так же можно переопределить в наследнике*/
-		virtual void KeyPressed (int btnCode){}
+		virtual void keyPressed (const int btnCode){}
 };
+#endif

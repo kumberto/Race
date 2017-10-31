@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CARWHEELS_H
+#define CARWHEELS_H
 #include "Point.h"
 class CarWheels
 {
@@ -22,4 +23,4 @@ class CarWheels
 		Point backRight_;
 		Point backLeft_;
 };
-
+#endif

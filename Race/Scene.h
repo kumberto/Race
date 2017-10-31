@@ -1,8 +1,9 @@
-#pragma once
+#ifndef SCENE_H
+#define SCENE_H
 #include "ChangeConsole\BaseApp.h"
 #include "RacingCar.h"
 #include "OncomingCar.h"
-#include "enum.cpp"
+#include "MagicNumbers.h"
 class Scene :
 	public BaseApp
 {
@@ -14,8 +15,8 @@ public:
 	Scene& operator=(const Scene& scene) = delete;
 	Scene(Scene&& scene) = delete;
 	Scene& operator=(Scene&& scene) = delete;
-	void KeyPressed(int btnCode);
-	void UpdateF(float deltaTime);
+	void keyPressed(const int btnCode);
+	void updateGameField(float deltaTime);
 	static const int getSpeed();
 
 private:
@@ -27,6 +28,7 @@ private:
 	void checkCollisionCars();
 	void moveRacing();
 	void cleanRacing();
+	void reset();
 	
 	RacingCar racing_;
 	OncomingCar* oncomingCar_;
@@ -34,5 +36,8 @@ private:
 	int speed_;
 	bool collision_;
 	bool pause_;
+	bool checkLeftMove_;
+	bool checkRightMove_;
 };
 
+#endif

@@ -83,7 +83,7 @@ wchar_t BaseApp::GetChar(int x, int y)
 	return mChiBuffer_[x + (X_SIZE+1)*y].Char.AsciiChar;
 }
 
-void BaseApp::Render()
+void BaseApp::render()
 {
 	if (!WriteConsoleOutput(mConsole_, mChiBuffer_, mDwBufferSize_, mDwBufferCoord_, &mLpWriteRegion_)) {
 		printf("WriteConsoleOutput failed - (%d)\n", GetLastError()); 
@@ -93,46 +93,32 @@ void BaseApp::Render()
 void BaseApp::Run()
 {
 	CStopwatch timer;
-	int sum = 0;
-	int counter = 0;
 
 	int deltaTime = 0;
 	while (true) {
 		timer.Start();
 		if (kbhit()) {
 
-			KeyPressed (getch());
+			keyPressed (getch());
 			if (!FlushConsoleInputBuffer(mConsoleIn_)) {
 				cout << "FlushConsoleInputBuffer failed with error " << GetLastError();
 			}
 		}
 
-		UpdateF((float)deltaTime / 1000.0f);
-		Render();
+		updateGameField((float)deltaTime / magicNumbers::millisecondsPerSecond);
+		render();
 		Sleep(1);
 
 		while (true) {
 			deltaTime = timer.Now();
 			if (kbhit()) {
-
-				KeyPressed(getch());
+				keyPressed(getch());
 				if (!FlushConsoleInputBuffer(mConsoleIn_))
 					cout << "FlushConsoleInputBuffer failed with error " << GetLastError();
 			}
 			if (deltaTime > Scene::getSpeed()) {
 				break;
 			}
-		}
-
-		sum += deltaTime;
-		counter++;
-		if (sum >= 1000) {
-			TCHAR  szbuff[255];
-			StringCchPrintf(szbuff, 255, TEXT("FPS: %d"), counter);
-			SetConsoleTitle(szbuff);
-
-			counter = 0;
-			sum = 0;
 		}
 	}
 }

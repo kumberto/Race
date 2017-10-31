@@ -7,29 +7,24 @@ RacingCar::RacingCar()
 	createCar();
 }
 
-
 RacingCar::~RacingCar()
 {
 }
 
-const CarBody & RacingCar::getCarBody() const
+void RacingCar::setCar(int number)
 {
-	return carBody_;
+	const_cast<CarBody&>(getCarBody()).setCarBodyX(number);
+	const_cast<CarWheels&>(getCarWheels()).setCarWheelX(number);
 }
 
-const CarWheels & RacingCar::getCarWheels() const
-{
-	return carWheels_;
-}
 
-void RacingCar::setRacingCar(int number)
+void RacingCar::reset()
 {
-	carBody_.setCarBodyX(number);
-	carWheels_.setCarWheelX(number);
+	createCar();
 }
 
 void RacingCar::createCar()
 {
-	carBody_.initPartsOfCar(25, 16, 17, 18, 19);
-	carWheels_.initPartsOfCar(24, 17, 26, 19);
+	const_cast<CarBody&>(getCarBody()).initPartsOfCar(25, 16, 17, 18, 19);
+	const_cast<CarWheels&>(getCarWheels()).initPartsOfCar(24, 17, 26, 19);
 }

@@ -1,22 +1,16 @@
-#pragma once
+#ifndef ONCOMINGCAR_H
+#define ONCOMINGCAR_H
+#include "Car.h"
 #include "CarBody.h"
 #include "CarWheels.h"
-#include "enum.cpp"
-class OncomingCar
+#include "MagicNumbers.h"
+class OncomingCar : public Car
 {
 public:
-	OncomingCar(StripOfRoadway strip);
+	OncomingCar(magicNumbers::StripOfRoadway strip);
 	~OncomingCar();
-	OncomingCar(const OncomingCar& oncomingCar) = delete;
-	OncomingCar& operator=(const OncomingCar& oncomingCar) = delete;
-	OncomingCar(OncomingCar&& oncomingCar) = delete;
-	OncomingCar& operator=(OncomingCar&& oncomingCar) = delete;
-	const CarBody& getCarBody() const;
-	const CarWheels& getCarWheels() const;
-	void setOncomingCar(int number);
+	void setCar(int number);
 private:
-	void initPartsOfCar(StripOfRoadway strip);
-	CarBody carBody_;
-	CarWheels carWheels_;
+	void initPartsOfCar(magicNumbers::StripOfRoadway strip);
 };
-
+#endif

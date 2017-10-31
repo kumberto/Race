@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Point.h"
+#include "MagicNumbers.h"
 
 
 
@@ -16,7 +17,12 @@ int Point::getX() const
 
 void Point::setX(int x)
 {
-	x_ += x;
+	if (x == magicNumbers::rightMove || x == magicNumbers::leftMove) {
+		x_ += x;
+	}
+	else {
+		x_ = x;
+	}
 }
 
 int Point::getY() const
@@ -26,5 +32,10 @@ int Point::getY() const
 
 void Point::setY(int y)
 {
-	y_ += y;
+	if (y == magicNumbers::unitOfMovement) {
+		y_ += y;
+	}
+	else {
+		y_ = y;
+	}
 }
