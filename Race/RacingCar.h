@@ -1,21 +1,16 @@
-#pragma once
+#ifndef RACINGCAR_H
+#define RACINGCAR_H
+#include "Car.h"
 #include "CarBody.h"
 #include "CarWheels.h"
-class RacingCar
+class RacingCar : public Car
 {
 	public:
 		RacingCar();
 		~RacingCar();
-		RacingCar(const RacingCar& racingCar) = delete;
-		RacingCar& operator=(const RacingCar& racingCar) = delete;
-		RacingCar(RacingCar&& racingCar) = delete;
-		RacingCar& operator=(RacingCar&& racingCar) = delete;
-		const CarBody& getCarBody() const;
-		const CarWheels& getCarWheels() const;
-		void setRacingCar(int number);
+		void setCar(int number);
+		void reset();
 	private:
 		void createCar();
-		CarBody carBody_;
-		CarWheels carWheels_;
 };
-
+#endif
