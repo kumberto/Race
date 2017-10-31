@@ -6,7 +6,7 @@ class Car
 {
 	public:
 		Car();
-		~Car();
+		virtual~Car();
 		Car(const Car& car) = delete;
 		Car& operator=(const Car& car) = delete;
 		Car(Car&& car) = delete;

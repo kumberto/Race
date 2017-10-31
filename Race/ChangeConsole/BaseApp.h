@@ -12,17 +12,6 @@ using namespace std;
 
 class BaseApp
 {
-	private:
-		HANDLE mConsole_;
-		HANDLE mConsoleIn_;
-
-		CHAR_INFO* mChiBuffer_;
-		COORD mDwBufferSize_;
-		COORD mDwBufferCoord_;
-		SMALL_RECT mLpWriteRegion_;
-
-		void render();
-
 	public:
 		//размеры области вывода по горизонтали и вертикали в символах
 		const int X_SIZE;
@@ -51,5 +40,16 @@ class BaseApp
 		будет уже непосредственно код самой клавиши, его можно получить, вызвав метод getch().
 		Метод KeyPressed так же можно переопределить в наследнике*/
 		virtual void keyPressed (const int btnCode){}
+	private:
+		HANDLE mConsole_;
+		HANDLE mConsoleIn_;
+
+		CHAR_INFO* mChiBuffer_;
+		COORD mDwBufferSize_;
+		COORD mDwBufferCoord_;
+		SMALL_RECT mLpWriteRegion_;
+
+		void render();
+
 };
 #endif
