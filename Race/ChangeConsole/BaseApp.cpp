@@ -37,16 +37,16 @@ BaseApp::BaseApp(int xSize, int ySize) : X_SIZE(xSize), Y_SIZE(ySize)
 
 	mChiBuffer_ = (CHAR_INFO*)malloc((X_SIZE+1)*(Y_SIZE+1)*sizeof(CHAR_INFO));
 
-	mDwBufferSize_.X = X_SIZE + 1;
-	mDwBufferSize_.Y = Y_SIZE + 1;		// размер буфера данных
+	mDwBufferSize_.X = X_SIZE + magicNumbers::expandingReadingField;
+	mDwBufferSize_.Y = Y_SIZE + magicNumbers::expandingReadingField;		// размер буфера данных
 
 	mDwBufferCoord_.X = 0;
 	mDwBufferCoord_.Y = 0;				// координаты €чейки
 
 	mLpWriteRegion_.Left = 0;
 	mLpWriteRegion_.Top = 0;
-	mLpWriteRegion_.Right = X_SIZE + 1;
-	mLpWriteRegion_.Bottom = Y_SIZE + 1;	// пр€моугольник дл€ чтени€
+	mLpWriteRegion_.Right = X_SIZE + magicNumbers::expandingReadingField;
+	mLpWriteRegion_.Bottom = Y_SIZE + magicNumbers::expandingReadingField;	// пр€моугольник дл€ чтени€
 
 
 	for (int x=0; x<X_SIZE+1; x++) {

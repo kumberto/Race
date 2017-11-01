@@ -17,7 +17,7 @@ public:
 	const Point& getRearPartOfCar() const;
 	void setCarBodyX(int number);
 	void setCarBodyY(int number);
-	void initPartsOfCar(int x, int frontPartY, int driverSeatY, int passengerSeatY, int rearPartY);
+	void initPartsOfCar(int x, int rearPartY, int passengerSeatY, int driverSeatY, int frontPartY);
 private:
 	Point frontPartOfCar_;
 	Point driverSeat_;

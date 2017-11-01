@@ -46,7 +46,7 @@ void CarBody::setCarBodyY(int number)
 	rearPartOfCar_.setY(number);
 }
 
-void CarBody::initPartsOfCar(int x, int frontPartY, int driverSeatY, int passengerSeatY, int rearPartY)
+void CarBody::initPartsOfCar(int x, int rearPartY, int passengerSeatY, int driverSeatY, int frontPartY)
 {
 	frontPartOfCar_.setX(x);
 	frontPartOfCar_.setY(frontPartY);

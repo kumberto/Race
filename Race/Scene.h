@@ -2,8 +2,9 @@
 #define SCENE_H
 #include "ChangeConsole\BaseApp.h"
 #include "RacingCar.h"
-#include "OncomingCar.h"
+#include "IEnemyMove.h"
 #include "MagicNumbers.h"
+#include "DiagonallyMove.h"
 class Scene :
 	public BaseApp
 {
@@ -20,24 +21,20 @@ public:
 	static const int getSpeed();
 
 private:
-	void moveOncomingCar();
+	void drawEnemyCar();
 	void cleanOncoming();
-	bool checkLeftMove();
-	bool checkRightMove();
 	void createFrame();
 	void checkCollisionCars();
-	void moveRacing();
+	void drawRacingCar();
 	void cleanRacing();
 	void reset();
 	
 	RacingCar racing_;
-	OncomingCar* oncomingCar_;
+	DiagonallyMove* oncomingCar_;
 	static int speedCounter_;
 	int speed_;
 	bool collision_;
 	bool pause_;
-	bool checkLeftMove_;
-	bool checkRightMove_;
 };
 
 #endif

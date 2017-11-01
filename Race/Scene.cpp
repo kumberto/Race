@@ -10,8 +10,6 @@ Scene::Scene()
 , speed_(magicNumbers::startingSpeed)
 , collision_(false)
 , pause_(false)
-, checkLeftMove_(true)
-, checkRightMove_(true)
 {
 	createFrame();
 }
@@ -23,36 +21,52 @@ Scene::~Scene()
 
 void Scene::keyPressed(const int btnCode)
 {
-	if (btnCode == magicNumbers::downKey && !pause_) { //down
+	if (btnCode == magicNumbers::leftKey && !pause_) {//left
+		if (racing_.checkLeftMove() && !collision_) {
+			cleanRacing();
+			racing_.setCarX(magicNumbers::leftMove);
+			drawRacingCar();
+			racing_.setCheckRightMove(true);
+		}
+	}
+	else if (btnCode == magicNumbers::rightKey && !pause_) {//right
+		if (racing_.checkRightMove() && !collision_) {
+			cleanRacing();
+			racing_.setCarX(magicNumbers::rightMove);
+			drawRacingCar();
+			racing_.setCheckLeftMove(true);
+		}
+	}
+	else if (btnCode == magicNumbers::upKey && !pause_) {
+		if (racing_.checkUpMove() && !collision_) {
+			cleanRacing();
+			racing_.setCarY(-1);
+			drawRacingCar();
+			racing_.setCheckDownMove(true);
+		}
+	}
+	else if (btnCode == magicNumbers::downKey && !pause_) {
+		if (racing_.checkDownMove() && !collision_) {
+			cleanRacing();
+			racing_.setCarY(1);
+			drawRacingCar();
+			racing_.setCheckUpMove(true);
+		}
+	}
+	else if (btnCode == magicNumbers::speedUpKey && !pause_) {
+		if (speedCounter_ > magicNumbers::upperCounterLimitSpeed &&
+			speed_ < magicNumbers::upperSpeedLimit && !collision_) {
+			speedCounter_ -= magicNumbers::stepCounter;
+			speed_ += magicNumbers::stepSpeed;
+			SetChar(magicNumbers::drawOfSpeedByX, magicNumbers::drawOfSpeedByY, speed_);
+		}
+	}
+	else if (btnCode == magicNumbers::speedDownKey && !pause_) { //down
 		if (speedCounter_ < magicNumbers::lowerCounterLimitSpeed &&
 			speed_ > magicNumbers::lowerSpeedLimit && !collision_)
 		{
 			speedCounter_ += magicNumbers::stepCounter;
 			speed_ -= magicNumbers::stepSpeed;
-			SetChar(magicNumbers::drawOfSpeedByX, magicNumbers::drawOfSpeedByY, speed_);
-		}
-	}
-	else if (btnCode == magicNumbers::leftKey && !pause_) {//left
-		if (checkLeftMove() && !collision_) {
-			cleanRacing();
-			racing_.setCar(magicNumbers::leftMove);
-			moveRacing();
-			checkRightMove_ = true;
-		}
-	}
-	else if (btnCode == magicNumbers::rightKey && !pause_) {//right
-		if (checkRightMove() && !collision_) {
-			cleanRacing();
-			racing_.setCar(magicNumbers::rightMove);
-			moveRacing();
-			checkLeftMove_ = true;
-		}
-	}
-	else if (btnCode == magicNumbers::upKey && !pause_) {
-		if (speedCounter_ > magicNumbers::upperCounterLimitSpeed &&
-			speed_ < magicNumbers::upperSpeedLimit && !collision_) {
-			speedCounter_ -= magicNumbers::stepCounter;
-			speed_ += magicNumbers::stepSpeed;
 			SetChar(magicNumbers::drawOfSpeedByX, magicNumbers::drawOfSpeedByY, speed_);
 		}
 	}
@@ -64,8 +78,8 @@ void Scene::keyPressed(const int btnCode)
 			SetChar(magicNumbers::drawOfUByX, magicNumbers::drawOfPauseByY, ' ');
 			SetChar(magicNumbers::drawOfSByX, magicNumbers::drawOfPauseByY, ' ');
 			SetChar(magicNumbers::drawOfEByX, magicNumbers::drawOfPauseByY, ' ');
-			moveRacing();
-			moveOncomingCar();
+			drawRacingCar();
+			drawEnemyCar();
 		}
 		else {
 			pause_ = true;
@@ -87,16 +101,16 @@ void Scene::updateGameField(float deltaTime)
 		if (!collision_) {
 			if (oncomingCar_ == nullptr) {
 				strip = rand() % magicNumbers::quantityStrips;
-				OncomingCar* car = new OncomingCar(static_cast<magicNumbers::StripOfRoadway>(strip));
+				DiagonallyMove* car = new DiagonallyMove(static_cast<magicNumbers::StripOfRoadway>(strip));
 				oncomingCar_ = car;
 			}
 			cleanOncoming();
-			moveRacing();
+			drawRacingCar();
 			checkCollisionCars();
-			oncomingCar_->setCar(magicNumbers::unitOfMovement);
-			moveOncomingCar();
-			if (oncomingCar_->getCarBody().getFrontPartOfCar().getY() == magicNumbers::endMoveOncomingCar) {
-				OncomingCar* temp = oncomingCar_;
+			oncomingCar_->move();
+			drawEnemyCar();
+			if (oncomingCar_->getCarBody().getRearPartOfCar().getY() == magicNumbers::endMoveOncomingCar) {
+				DiagonallyMove* temp = oncomingCar_;
 				oncomingCar_ = nullptr;
 				delete temp;
 			}
@@ -121,7 +135,7 @@ void Scene::updateGameField(float deltaTime)
 	}
 }
 
-void Scene::moveRacing()
+void Scene::drawRacingCar()
 {
 	SetChar(racing_.getCarBody().getFrontPartOfCar().getX(),
 		racing_.getCarBody().getFrontPartOfCar().getY(), '+');
@@ -141,7 +155,7 @@ void Scene::moveRacing()
 		racing_.getCarWheels().getBackLeft().getY(), '+');
 }
 
-void Scene::moveOncomingCar()
+void Scene::drawEnemyCar()
 {
 	if (oncomingCar_->getCarBody().getFrontPartOfCar().getY() > magicNumbers::beginMoveOncomingCar &&
 		oncomingCar_->getCarBody().getFrontPartOfCar().getY() < magicNumbers::endMoveOncomingCar)
@@ -152,12 +166,13 @@ void Scene::moveOncomingCar()
 	if (oncomingCar_->getCarBody().getDriverSeat().getY() > magicNumbers::beginMoveOncomingCar &&
 		oncomingCar_->getCarBody().getDriverSeat().getY() < magicNumbers::endMoveOncomingCar)
 	{
+		SetChar(oncomingCar_->getCarBody().getDriverSeat().getX(),
+			oncomingCar_->getCarBody().getDriverSeat().getY(), '+');
 		SetChar(oncomingCar_->getCarWheels().getFrontRight().getX(),
 			oncomingCar_->getCarWheels().getFrontRight().getY(), '+');
 		SetChar(oncomingCar_->getCarWheels().getFrontLeft().getX(),
 			oncomingCar_->getCarWheels().getFrontLeft().getY(), '+');
-		SetChar(oncomingCar_->getCarBody().getDriverSeat().getX(),
-			oncomingCar_->getCarBody().getDriverSeat().getY(), '+');
+		
 	}
 	if (oncomingCar_->getCarBody().getPassengerSeat().getY() > magicNumbers::beginMoveOncomingCar &&
 		oncomingCar_->getCarBody().getPassengerSeat().getY() < magicNumbers::endMoveOncomingCar)
@@ -201,11 +216,11 @@ void Scene::reset()
 {
 	cleanRacing();
 	cleanOncoming();
-	OncomingCar* temp = oncomingCar_;
+	DiagonallyMove* temp = oncomingCar_;
 	oncomingCar_ = nullptr;
 	delete temp;
 	int strip = rand() % magicNumbers::quantityStrips;
-	OncomingCar* car = new OncomingCar(static_cast<magicNumbers::StripOfRoadway>(strip));
+	DiagonallyMove* car = new DiagonallyMove(static_cast<magicNumbers::StripOfRoadway>(strip));
 	oncomingCar_ = car;
 	racing_.reset();
 	collision_ = false;
@@ -226,14 +241,14 @@ const int Scene::getSpeed()
 
 void Scene::cleanOncoming()
 {
-	if (oncomingCar_->getCarBody().getFrontPartOfCar().getY() > 4 &&
-		oncomingCar_->getCarBody().getFrontPartOfCar().getY() < 20)
+	if (oncomingCar_->getCarBody().getFrontPartOfCar().getY() > magicNumbers::startValueEnemyCar &&
+		oncomingCar_->getCarBody().getFrontPartOfCar().getY() < magicNumbers::endValueEnemyCar)
 	{
 		SetChar(oncomingCar_->getCarBody().getFrontPartOfCar().getX(),
 			oncomingCar_->getCarBody().getFrontPartOfCar().getY(), ' ');
 	}
-	if (oncomingCar_->getCarBody().getDriverSeat().getY() > 4 &&
-		oncomingCar_->getCarBody().getDriverSeat().getY() < 20)
+	if (oncomingCar_->getCarBody().getDriverSeat().getY() > magicNumbers::startValueEnemyCar &&
+		oncomingCar_->getCarBody().getDriverSeat().getY() < magicNumbers::endValueEnemyCar)
 	{
 		SetChar(oncomingCar_->getCarWheels().getFrontRight().getX(),
 			oncomingCar_->getCarWheels().getFrontRight().getY(), ' ');
@@ -242,14 +257,14 @@ void Scene::cleanOncoming()
 		SetChar(oncomingCar_->getCarBody().getDriverSeat().getX(), 
 			oncomingCar_->getCarBody().getDriverSeat().getY(), ' ');
 	}
-	if (oncomingCar_->getCarBody().getPassengerSeat().getY() > 4 && 
-		oncomingCar_->getCarBody().getPassengerSeat().getY() < 20)
+	if (oncomingCar_->getCarBody().getPassengerSeat().getY() > magicNumbers::startValueEnemyCar &&
+		oncomingCar_->getCarBody().getPassengerSeat().getY() < magicNumbers::endValueEnemyCar)
 	{
 		SetChar(oncomingCar_->getCarBody().getPassengerSeat().getX(),
 			oncomingCar_->getCarBody().getPassengerSeat().getY(), ' ');
 	}
-	if (oncomingCar_->getCarBody().getRearPartOfCar().getY() > 4 &&
-		oncomingCar_->getCarBody().getRearPartOfCar().getY() < 20)
+	if (oncomingCar_->getCarBody().getRearPartOfCar().getY() > magicNumbers::startValueEnemyCar &&
+		oncomingCar_->getCarBody().getRearPartOfCar().getY() < magicNumbers::endValueEnemyCar)
 	{
 		SetChar(oncomingCar_->getCarBody().getRearPartOfCar().getX(),
 			oncomingCar_->getCarBody().getRearPartOfCar().getY(), ' ');
@@ -276,20 +291,7 @@ void Scene::createFrame()
 			}
 		}
 	}
-	for (int i = magicNumbers::beginOfFieldByCoordinateY;
-		i < magicNumbers::endScoreboardByCoordinateY; i++)
-	{
-		for (int j = magicNumbers::endOfFieldByCoordinateX;
-			j < magicNumbers::endOfScoreboardByCoordinateX; j++)
-		{
-			if (i == magicNumbers::drawTopBorder ||
-				i == magicNumbers::drawBottomBorderScoreboard ||
-				j == magicNumbers::drawRightBorderScoreboard)
-			{
-				SetChar(j, i, magicNumbers::symbolForDrawBorder);
-			}
-		}
-	}
+	
 	SetChar(magicNumbers::drawLetterSByX, magicNumbers::drawWordSpeedByY, 'S');
 	SetChar(magicNumbers::drawLetterPByX, magicNumbers::drawWordSpeedByY, 'p');
 	SetChar(magicNumbers::drawLetterEByX, magicNumbers::drawWordSpeedByY, 'e');
@@ -318,31 +320,17 @@ void Scene::createFrame()
 
 void Scene::checkCollisionCars()
 {
-	if (GetChar(oncomingCar_->getCarWheels().getFrontRight().getX(),
+	if (GetChar(oncomingCar_->getCarWheels().getFrontRight().getX() + 1,
 		(oncomingCar_->getCarWheels().getFrontRight().getY() + 1)) == '+' ||
-		GetChar(oncomingCar_->getCarWheels().getFrontLeft().getX(),
+		GetChar(oncomingCar_->getCarWheels().getFrontLeft().getX() + 1,
 		(oncomingCar_->getCarWheels().getFrontLeft().getY() + 1)) == '+' ||
-		GetChar(oncomingCar_->getCarBody().getRearPartOfCar().getX(),
+		GetChar(oncomingCar_->getCarBody().getRearPartOfCar().getX() + 1,
 		(oncomingCar_->getCarBody().getRearPartOfCar().getY() + 1)) == '+' ||
-		GetChar(oncomingCar_->getCarWheels().getBackRight().getX(),
+		GetChar(oncomingCar_->getCarWheels().getBackRight().getX() + 1,
 		(oncomingCar_->getCarWheels().getBackRight().getY() + 1)) == '+' ||
-		GetChar(oncomingCar_->getCarWheels().getBackLeft().getX(),
+		GetChar(oncomingCar_->getCarWheels().getBackLeft().getX() + 1,
 		(oncomingCar_->getCarWheels().getBackLeft().getY() + 1)) == '+')
 	{
 		collision_ = true;
 	}
-}
-
-bool Scene::checkLeftMove() {
-	if (racing_.getCarWheels().getFrontLeft().getX() == magicNumbers::borderLeftSide) {
-		checkLeftMove_ = false;
-	}
-	return checkLeftMove_;
-}
-
-bool Scene::checkRightMove() {
-	if (racing_.getCarWheels().getFrontRight().getX() == magicNumbers::borderRightSide) {
-		checkRightMove_ = false;
-	}
-	return checkRightMove_;
 }

@@ -32,7 +32,7 @@ int Point::getY() const
 
 void Point::setY(int y)
 {
-	if (y == magicNumbers::unitOfMovement) {
+	if (y == magicNumbers::downMove || y == magicNumbers::upMove) {
 		y_ += y;
 	}
 	else {

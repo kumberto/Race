@@ -8,9 +8,20 @@ class RacingCar : public Car
 	public:
 		RacingCar();
 		~RacingCar();
-		void setCar(int number);
 		void reset();
+		void setCheckLeftMove(bool check);
+		void setCheckRightMove(bool check);
+		void setCheckUpMove(bool check);
+		void setCheckDownMove(bool check);
+		bool checkLeftMove();
+		bool checkRightMove();
+		bool checkUpMove();
+		bool checkDownMove();
 	private:
 		void createCar();
+		bool checkLeftMove_;
+		bool checkRightMove_;
+		bool checkUpMove_;
+		bool checkDownMove_;
 };
 #endif

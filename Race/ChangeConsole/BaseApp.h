@@ -7,6 +7,7 @@
 #include <Windows.h>
 #include <vector>
 #include <string>
+#include "../MagicNumbers.h"
 
 using namespace std;
 
@@ -18,7 +19,7 @@ class BaseApp
 		const int Y_SIZE;
 
 		//аргументами являются размеры области вывода по горизонтали и вертикали в символах
-		BaseApp(int xSize=100, int ySize=80);
+		BaseApp(int xSize = magicNumbers::defaultX, int ySize = magicNumbers::defaultY);
 		virtual ~BaseApp();
 		BaseApp(const BaseApp& baseApp) = delete;
 		BaseApp& operator=(const BaseApp& baseApp) = delete;
