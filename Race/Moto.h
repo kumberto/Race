@@ -1,15 +1,16 @@
 #ifndef ONCOMINGCAR_H
 #define ONCOMINGCAR_H
-#include "Car.h"
 #include "CarBody.h"
 #include "CarWheels.h"
 #include "MagicNumbers.h"
-class OncomingCar : public Car
+#include "Enemy.h"
+
+class Moto : public Enemy
 {
 public:
 	OncomingCar(magicNumbers::StripOfRoadway strip);
 	~OncomingCar();
-	void setCar(int number);
+	void move();
 private:
 	void initPartsOfCar(magicNumbers::StripOfRoadway strip);
 };

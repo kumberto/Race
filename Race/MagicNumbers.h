@@ -2,8 +2,7 @@
 #define MAGICNUMBERS_H
 namespace magicNumbers {
 	enum StripOfRoadway { LEFT_STRIP = 0, CENTRAL_STRIP, RIGHT_STRIP };
-	enum DirectionMovement { UP = 0, DOWN, LEFT, RIGHT, DIAGONALLYTOUP, DIAGONALLYTODOWN };
-	enum Cars{RACING_CAR = 0, ONCOMING_CAR};
+	enum DirectionMovement {LEFT = 0, RIGHT, DIAGONALLY, DOWN};
 	static int widthApp = 50;
 	static int heightApp = 30;
 
